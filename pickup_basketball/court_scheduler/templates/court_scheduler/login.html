@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'court_scheduler/styles.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <form id="login-form">
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name" name="name" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userName = document.getElementById('name').value;
+            localStorage.setItem('userName', userName);
+            window.location.href = '/calendar';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Django specific
+*.log
+*.pot
+*.py[cod]
+*.sqlite3
+db.sqlite3
+/media
+/staticfiles
+
+# Virtual environment
+env/
+venv/
+*.env
+.env
+
+# IDE files
+.vscode/
+.idea/
+
+# MacOS specific
+.DS_Store

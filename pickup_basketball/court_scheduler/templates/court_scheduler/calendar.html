@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Basketball Calendar</title>
+    <link rel="stylesheet" href="{% static 'court_scheduler/styles.css' %}">
+</head>
+<body>
+    <h1>Available Courts</h1>
+    <div id="calendar"></div>
+
+    <script src="{% static 'court_scheduler/calendar.js' %}"></script>
+</body>
+</html>
