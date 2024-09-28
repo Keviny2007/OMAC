@@ -15,3 +15,12 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.name} attending {self.time_slot}"
+
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    courts = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
