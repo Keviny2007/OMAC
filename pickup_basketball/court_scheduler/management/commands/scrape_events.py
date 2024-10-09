@@ -16,33 +16,43 @@ class Command(BaseCommand):
         driver = webdriver.Chrome(service=service)
         url = 'https://25live.collegenet.com/pro/brown/embedded/calendar?comptype=calendar&compsubject=location&itemTypeId=4&queryId=548963&embeddedConfigToken=4C7BA58F-4540-4940-AF8D-25D1A23A3C00#!/home/event/482576/details'
         driver.get(url)
-        time.sleep(10)
+        time.sleep(5)
         html = driver.page_source
         driver.quit()
 
-        # Parse the HTML
+        # Parse HTML
         soup = BeautifulSoup(html, 'html.parser')
 
-        # Clear the previous events in the database
+        # Clear previous events in database
         Event.objects.all().delete()
 
-        # Extract the days of the week
+        # Extract days of week
         days_of_week = [th.text for th in soup.find('thead').find_all('th')]
 
         # Extract date cells
         date_cells = soup.find_all('div', class_='CalendarDayHeader')
 
-        # Map dates to their corresponding days
+        # Map dates to corresponding days
         date_mapping = {}
+        previous_date_obj = None
         for i, cell in enumerate(date_cells):
             date_text = cell.find('a').text.strip()
-            if i == 0:  # The first cell shows the full date (e.g., "September 22")
+            if len(date_text.split()) > 1:  # check if month text
                 date_obj = datetime.datetime.strptime(date_text, "%B %d")
-            else:  # Subsequent cells only show the day (e.g., "23")
-                date_obj = datetime.datetime.strptime(f"{date_mapping[0].month} {date_text} {datetime.datetime.now().year}", "%m %d %Y")
-                date_obj = date_obj.replace(month=date_mapping[0].month)  # Keep the same month as the first
+                date_obj = date_obj.replace(year=datetime.datetime.now().year)
+            else:  # just date number
+                day = int(date_text)
+                
+                if previous_date_obj and day < previous_date_obj.day:
+                    month = previous_date_obj.month + 1
+                    if month > 12:
+                        month = 1
+                    date_obj = previous_date_obj.replace(month=month, day=day)
+                else:
+                    date_obj = previous_date_obj.replace(day=day)  
 
             date_mapping[i] = date_obj
+            previous_date_obj = date_obj
 
         # Extract events
         for i, cell in enumerate(date_cells):
