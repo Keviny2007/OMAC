@@ -14,7 +14,8 @@ class Command(BaseCommand):
         # Set up Selenium
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service)
-        url = 'https://25live.collegenet.com/pro/brown/embedded/calendar?comptype=calendar&compsubject=location&itemTypeId=4&queryId=548963&embeddedConfigToken=4C7BA58F-4540-4940-AF8D-25D1A23A3C00#!/home/event/482576/details'
+        # change this link weekly
+        url = "https://25live.collegenet.com/pro/brown/embedded/calendar?comptype=calendar&compsubject=location&itemTypeId=4&queryId=548963&embeddedConfigToken=4C7BA58F-4540-4940-AF8D-25D1A23A3C00#!/home/event/482576/details"
         driver.get(url)
         time.sleep(5)
         html = driver.page_source

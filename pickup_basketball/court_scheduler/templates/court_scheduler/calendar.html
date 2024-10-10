@@ -8,8 +8,27 @@
     <link rel="stylesheet" href="{% static 'court_scheduler/styles.css' %}">
 </head>
 <body>
-    <h1>Available Courts</h1>
-    <div id="calendar"></div>
+    <div class="weekly-calendar">
+        <div class="calendar-header">
+            <button class="nav-btn" id="prev-week">Previous</button>
+            {% if week_dates %}
+                <span class="month-year">{{ week_dates.0|date:"F j" }} - {{ week_dates.6|date:"F j, Y" }}</span>
+            {% else %}
+                <span class="month-year">No events scheduled for this week.</span>
+            {% endif %}
+            <button class="nav-btn" id="next-week">Next</button>
+        </div>
+        <div class="calendar-body">
+            <div class="calendar-row">
+                {% for date in week_dates %}
+                <div class="calendar-day">
+                    <div class="day-name">{{ date|date:"l" }}</div>  <!-- Day of the week, e.g., Sunday -->
+                    <div class="day-date">{{ date|date:"j" }}</div>    <!-- Date of the day, e.g., 6 -->
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
     <script src="{% static 'court_scheduler/calendar.js' %}"></script>
 </body>
