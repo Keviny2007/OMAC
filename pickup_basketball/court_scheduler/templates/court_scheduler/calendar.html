@@ -2,29 +2,45 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load custom_filters %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pickup Basketball Calendar</title>
     <link rel="stylesheet" href="{% static 'court_scheduler/styles.css' %}">
 </head>
 <body>
+    <header class="title-banner">
+        <h1>OMAC Hoops</h1>
+    </header>
+    
     <div class="weekly-calendar">
         <div class="calendar-header">
             <button class="nav-btn" id="prev-week">Previous</button>
-            {% if week_dates %}
-                <span class="month-year">{{ week_dates.0|date:"F j" }} - {{ week_dates.6|date:"F j, Y" }}</span>
-            {% else %}
-                <span class="month-year">No events scheduled for this week.</span>
-            {% endif %}
+            <span class="month-year">{{ week_dates.0|date:"F j" }} - {{ week_dates.6|date:"F j, Y" }}</span>
             <button class="nav-btn" id="next-week">Next</button>
         </div>
         <div class="calendar-body">
             <div class="calendar-row">
                 {% for date in week_dates %}
-                <div class="calendar-day">
-                    <div class="day-name">{{ date|date:"l" }}</div>  <!-- Day of the week, e.g., Sunday -->
-                    <div class="day-date">{{ date|date:"j" }}</div>    <!-- Date of the day, e.g., 6 -->
-                </div>
+                    <div class="calendar-day">
+                        <div class="day-name">{{ date|date:"l" }}</div>  <!-- Day of the week -->
+                        <div class="day-date">{{ date|date:"j" }}</div>    <!-- Date -->
+
+                        <!-- Free slots for the day -->
+                        <div class="free-slots">
+                            {% with free_slots_by_day|dict_get:date as free_slots %} <!-- Custom Django filter -->
+                                {% if free_slots %}
+                                    <ul>
+                                        {% for slot in free_slots %}
+                                            <li>{{ slot|time:"g:i A" }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p>No free slots available.</p>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         </div>
