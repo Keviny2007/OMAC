@@ -90,9 +90,47 @@ body {
 }
 
 .time-slot {
-    margin: 10px;
+    margin: 8px 0;
     padding: 10px;
-    background-color: #fff;
+    background-color: #ffffff;
     border: 1px solid #ddd;
-    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 1.1em;
+}
+
+.time-slot:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.slots-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; /* Space between each slot */
+}
+
+.available-courts {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 300;
+    text-align: left;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.current-day {
+    background-color: #ffeeba; /* Light yellow background for highlighting */
+    border: 2px solid #ffcc00; /* A stronger border to make it stand out */
+}
+
+.current-day .day-name, .current-day .day-date {
+    font-weight: bold;
+    color: #333; /* Darker text color for better contrast */
 }

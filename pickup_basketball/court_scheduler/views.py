@@ -51,11 +51,11 @@ def weekly_calendar_view(request):
         day_events = events.filter(start_time__date=date)
         free_slots = calculate_free_slots(day_events, omac_open_time, omac_close_time)
         free_slots_by_day[date] = free_slots
-    pprint.pprint(free_slots_by_day)
+    # pprint.pprint(free_slots_by_day)
     context = {
         'week_dates': week_dates,  # Pass the list of dates
         'free_slots_by_day': free_slots_by_day, # Free slots for each day
-        'events': events,  # Pass the events for the current week
+        'today': today,
     }
     
     return render(request, 'court_scheduler/calendar.html', context)

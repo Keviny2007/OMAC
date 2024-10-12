@@ -1,5 +1,7 @@
 from datetime import timedelta, datetime
 
+TOTAL_COURTS = {"OMAC CT1", "OMAC CT2", "OMAC CT3", "OMAC CT4"}
+
 # Helper function to generate time ranges using datetime for arithmetic
 def generate_time_range(start_time, end_time, slot_duration=timedelta(minutes=30)):
     '''
@@ -19,21 +21,28 @@ def generate_time_range(start_time, end_time, slot_duration=timedelta(minutes=30
 
 # Function to calculate free slots around events
 def calculate_free_slots(events, day_start_time, day_end_time):
-    # All times in the range from day start to end
     full_day_slots = list(generate_time_range(day_start_time, day_end_time))
-    # print(f"Full day slots: {full_day_slots}")  # Debugging output
+    free_slots = []
+    for slot in full_day_slots:
+        # Default available courts for this time slot
+        available_courts = TOTAL_COURTS.copy()
 
+        # Check if any event overlaps with this slot
+        for event in events:
+            event_start = event.start_time.time()
+            event_end = event.end_time.time()
+            if event_start <= slot < event_end:
+                # Remove the courts occupied by this event from the available list
+                occupied_courts = set(event.courts.split(", "))
+                # print(occupied_courts)
+                available_courts -= occupied_courts
+                print(available_courts)
 
-    # Sort events by start time to process them chronologically
-    sorted_events = sorted(events, key=lambda event: event.start_time)
-    # for event in sorted_events:
-        # print(f"Event start: {event.start_time}, Event end: {event.end_time}")  # Debugging output
+        # If there are any available courts left, include this slot with details of free courts
+        if available_courts:
+            free_slots.append({
+                "time": slot,
+                "available_courts": sorted(available_courts)  # Sorting for better display
+            })
 
-    # Remove the times that are occupied by events
-    for event in sorted_events:
-        event_start = event.start_time.time()
-        event_end = event.end_time.time()
-        full_day_slots = [slot for slot in full_day_slots if not (event_start <= slot < event_end)]
-
-    # print(f"Free slots after event removal: {full_day_slots}")  # Debugging output
-    return full_day_slots
+    return free_slots

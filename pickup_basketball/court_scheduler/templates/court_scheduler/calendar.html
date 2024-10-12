@@ -22,19 +22,24 @@
         <div class="calendar-body">
             <div class="calendar-row">
                 {% for date in week_dates %}
-                    <div class="calendar-day">
+                    <div class="calendar-day {% if date == today %}current-day{% endif %}">
                         <div class="day-name">{{ date|date:"l" }}</div>  <!-- Day of the week -->
                         <div class="day-date">{{ date|date:"j" }}</div>    <!-- Date -->
 
                         <!-- Free slots for the day -->
                         <div class="free-slots">
-                            {% with free_slots_by_day|dict_get:date as free_slots %} <!-- Custom Django filter -->
+                            {% with free_slots_by_day|dict_get:date as free_slots %}
                                 {% if free_slots %}
-                                    <ul>
-                                        {% for slot in free_slots %}
-                                            <li>{{ slot|time:"g:i A" }}</li>
+                                    <div class="slots-container">
+                                        {% for slot_info in free_slots %}
+                                            <div class="time-slot">
+                                                <div>{{ slot_info.time|time:"g:i A" }}</div>
+                                                <div class="available-courts">
+                                                    Available Courts: {{ slot_info.available_courts|join:", " }}
+                                                </div>
+                                            </div>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% else %}
                                     <p>No free slots available.</p>
                                 {% endif %}
