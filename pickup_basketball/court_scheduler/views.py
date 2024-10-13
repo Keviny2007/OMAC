@@ -33,11 +33,18 @@ def weekly_calendar_view(request):
 
     # YYYY-MM-DD
     today = datetime.date.today()
-    start_of_week = today - datetime.timedelta(days=today.weekday() + 1)
-    end_of_week = start_of_week + datetime.timedelta(days=6)
+    day_of_week = today.weekday()
 
+    if day_of_week == 6: # If Sunday, start new week
+        start_of_week = today  
+        end_of_week = start_of_week + datetime.timedelta(days=6)
+    else:
+        start_of_week = today - datetime.timedelta(days=today.weekday() + 1)
+        end_of_week = start_of_week + datetime.timedelta(days=6)
+    print(today)
+    print(start_of_week)
+    print(end_of_week)
     events = Event.objects.filter(start_time__date__range=(start_of_week, end_of_week))
-
     week_dates = sorted(set(event.start_time.date() for event in events))  # Get unique dates
 
     # OMAC hours (6:00:00 - 23:00:00)
